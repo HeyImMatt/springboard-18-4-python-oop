@@ -19,21 +19,30 @@ class SerialGenerator:
     >>> serial.generate()
     100
     """
-    def __init__(self, start):
+    def __init__(self, start=0):
         """Create SerialGenerator with a starting number"""
 
         self.start = start
-        self.counter = 0
+        self.counter = start
+    
+    def __repr__(self):
+        """Show representation."""
+
+        return f"<SerialGenerator start={self.start} counter={self.counter}>"
 
     def generate(self):
         """Generate a serial number that increments 1 each time"""
-        
-        if self.counter == 0:
+
+        if self.counter == self.start:
             self.counter += 1
             return self.start
         else:
             self.counter += 1
-            self.start += 1
-            return self.start
+            return self.counter - 1
+            
         
+    def reset(self):
+        """Reset the serial number back to starting value"""
+
+        self.counter = self.start
     
