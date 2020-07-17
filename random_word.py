@@ -1,27 +1,61 @@
-from random import choice
+import random
+
 
 class WordFinder:
-  """Reads words from a file and provides a method to generate a random word"""
-
-  def __init__(self, path='words.txt'):
-    """Initializes by opening the default words list or a user-provided path, 
-    reads the words list, and tells user how many words are in the list"""
-
-    self.path = path
-
-    with open(self.path) as f:
-        self.words = f.readlines()
-
-    self.list_length()
-
-  def list_length(self):
-    self.count = len(self.words)
+    """Machine for finding random words from dictionary.
     
-    print(f'{self.count} words read')
+    >>> wf = WordFinder("simple.txt")
+    3 words read
 
-  def random(self):
-    """Generates a random word from the list"""
-    rand_word = choice(self.words)
-    return rand_word[:-1]
+    >>> wf.random() in ["cat", "dog", "porcupine"]
+    True
 
+    >>> wf.random() in ["cat", "dog", "porcupine"]
+    True
+
+    >>> wf.random() in ["cat", "dog", "porcupine"]
+    True
+    """
+
+    def __init__(self, path):
+        """Read dictionary and reports # items read."""
+
+        dict_file = open(path)
+
+        self.words = self.parse(dict_file)
+
+        print(f"{len(self.words)} words read")
+
+    def parse(self, dict_file):
+        """Parse dict_file -> list of words."""
+
+        return [w.strip() for w in dict_file]
+
+    def random(self):
+        """Return random word."""
+
+        return random.choice(self.words)
+
+
+class SpecialWordFinder(WordFinder):
+    """Specialized WordFinder that excludes blank lines/comments.
+    
+    >>> swf = SpecialWordFinder("complex.txt")
+    3 words read
+
+    >>> swf.random() in ["pear", "carrot", "kale"]
+    True
+
+    >>> swf.random() in ["pear", "carrot", "kale"]
+    True
+
+    >>> swf.random() in ["pear", "carrot", "kale"]
+    True
+    """
+
+    def parse(self, dict_file):
+        """Parse dict_file -> list of words, skipping blanks/comments."""
+
+        return [w.strip() for w in dict_file
+                if w.strip() and not w.startswith("#")]
 
